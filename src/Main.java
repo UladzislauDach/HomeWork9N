@@ -1,95 +1,45 @@
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
-        //writeFileByFileOutputStream("fileOut.txt", readFileByFileInputStream("file.txt"));
-        //writeFileByBufferedOutputStream("fileOut.txt", readFileByBufferedInputStream("file.txt"));
-        writeFileByStrings("fileOut.txt", sortStrings(readFileByStrings("file.txt")));
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
+        //serializeStudent();
+        //deSerializeStudent();
+        serializeListStudent();
     }
 
-    public static List<Integer> readFileByFileInputStream(String fileName) {
-        List<Integer> list = new ArrayList<>();
-        try (FileInputStream fileIn = new FileInputStream(fileName)) {
-            int i;
-            while ((i = fileIn.read()) != -1) {
-                list.add(i);
-            }
-        } catch (IOException e) {
-            e.getMessage();
-        }
-        return list;
+    public static void serializeStudent() throws IOException {
+        Student student1 = new Student("Edward", "Protas", "30112114",
+                new University("BGTU", 1992));
+        FileOutputStream fos = new FileOutputStream("objectFile");
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
+        oos.writeObject(student1);
+        oos.close();
     }
 
-    public static void writeFileByFileOutputStream(String outPutFileName, List<Integer> file) {
-        try (FileOutputStream fileOut = new FileOutputStream(outPutFileName)) {
-            for (int i = 0; i < file.size(); i++) {
-                fileOut.write(file.get(i));
-            }
-        } catch (IOException e) {
-            e.getMessage();
-        }
-
+    public static void deSerializeStudent() throws IOException, ClassNotFoundException {
+        FileInputStream fis = new FileInputStream("objectFile");
+        ObjectInputStream ois = new ObjectInputStream(fis);
+        Student newStudent = (Student) ois.readObject();
+        System.out.println(newStudent.getFirstName() + newStudent.getLastName()
+                + newStudent.getNumberOfGroup() + newStudent.getUniversity());
     }
 
-    public static List<Integer> readFileByBufferedInputStream(String fileName) {
-        List<Integer> list = new ArrayList<>();
-        try (FileInputStream fis = new FileInputStream(fileName);
-             BufferedInputStream bis = new BufferedInputStream(fis)) {
-            int i;
-            while ((i = bis.read()) != -1) {
-                list.add(i);
-            }
-        } catch (IOException e) {
-            e.getMessage();
-        }
-        return list;
-    }
+    public static void serializeListStudent() throws IOException {
+        ArrayList<Student> students = new ArrayList<Student>();
 
-    public static void writeFileByBufferedOutputStream(String outPutFileName, List<Integer> file) {
-        byte[] arr = new byte[file.size()];
-        for (int i = 0; i < file.size(); i++) {
-            arr[i] = file.get(i).byteValue();
-        }
+        students.add(new Student("A", "A", "1",
+                new University("AA", 11)));
+        students.add(new Student("B", "B", "2",
+                new University("BB", 22)));
+        students.add(new Student("C", "C", "3",
+                new University("CC", 33)));
 
-        try (FileOutputStream fos = new FileOutputStream(outPutFileName);
-             BufferedOutputStream bos = new BufferedOutputStream(fos)) {
-            bos.write(arr, 0, arr.length);
-        } catch (IOException e) {
-            e.getMessage();
-        }
-    }
+        FileOutputStream fos = new FileOutputStream("listObjectFile");
+        ObjectOutputStream ois = new ObjectOutputStream(fos);
+        ois.writeObject(students);
 
-    public static List<String> readFileByStrings(String fileName) {
-        ArrayList<String> list = new ArrayList<String>();
-        String a;
-        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
-            Scanner sc = new Scanner(br);
-            while (sc.hasNextLine()) {
-                list.add(sc.nextLine());
-            }
-        } catch (IOException e) {
-            e.getMessage();
-        }
-        return list;
-    }
-
-    public static List<String> sortStrings(List<String> list) {
-        Collections.sort(list);
-        return list;
-    }
-
-    public static void writeFileByStrings(String fileName, List<String> list) {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileName))) {
-            for (int i = 0; i < list.size(); i++) {
-                bw.write(list.get(i)+ "\n");
-            }
-        } catch (IOException e) {
-            e.getMessage();
-        }
     }
 
 }
