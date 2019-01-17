@@ -7,6 +7,7 @@ public class Main {
         //serializeStudent();
         //deSerializeStudent();
         serializeListStudent();
+        deSerializeListStudent();
     }
 
     public static void serializeStudent() throws IOException {
@@ -39,6 +40,14 @@ public class Main {
         FileOutputStream fos = new FileOutputStream("listObjectFile");
         ObjectOutputStream ois = new ObjectOutputStream(fos);
         ois.writeObject(students);
+
+    }
+
+    public static void deSerializeListStudent() throws IOException, ClassNotFoundException {
+        ArrayList<Student> newStudents = new ArrayList<Student>();
+        FileInputStream fis = new FileInputStream("listObjectFile");
+        ObjectInputStream ois = new ObjectInputStream(fis);
+
 
     }
 
